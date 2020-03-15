@@ -6,8 +6,8 @@ import TaskOptimizer from "../services/TaskOptimizer";
 
 function Chores(props) {
   const [participants, setParticipants] = useState([
-    { name: "A" },
-    { name: "B" }
+    { name: "Benjamin" },
+    { name: "Sepideh" }
   ]);
 
   const [tasks, setTasks] = useState([
@@ -20,9 +20,11 @@ function Chores(props) {
   ]);
 
   const [costs, setCosts] = useState([
-    [80, 80, 60, 25, 100, 9],
+    [100, 100, 80, 20, 70, 10],
     [5, 3, 6, 2, 7, 2]
   ]);
+
+  const [scores, setScores] = useState([]);
 
   const [assignments, setAssignments] = useState({});
 
@@ -51,12 +53,13 @@ function Chores(props) {
   };
 
   const recomputeTaskAssignments = () => {
-    const bestAssignment = TaskOptimizer.assignTasks({
+    const result = TaskOptimizer.assignTasks({
       participants,
       tasks,
       costs
     });
-    setAssignments(bestAssignment);
+    setAssignments(result.assignment);
+    setScores(result.scores);
   };
 
   const isAssigned = (participantIdx, taskIdx) => {
@@ -87,16 +90,26 @@ function Chores(props) {
     </tr>
   ));
 
+  const scoresContent = scores.map(s => (
+    <EditableCell value={parseInt(s * 100)} placeholder="-" isCentered="true" />
+  ));
+
   return (
-    <Table striped bordered hover responsive="lg">
-      <thead>
-        <tr>
-          <th></th>
-          {participantHeaders}
-        </tr>
-        {tableContent}
-      </thead>
-    </Table>
+    <div>
+      <Table striped bordered hover responsive="lg">
+        <thead>
+          <tr>
+            <th></th>
+            {participantHeaders}
+          </tr>
+          {tableContent}
+          <tr>
+            <EditableCell value="(Scores)" placeholder="-" />
+            {scoresContent}
+          </tr>
+        </thead>
+      </Table>
+    </div>
   );
 }
 

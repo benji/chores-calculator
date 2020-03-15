@@ -17,19 +17,22 @@ self.assignTasks = context => {
     currentTaskAssignmentScore: 0
   };
   self.assignTasksRecursive(globalContext, iterationContext, 0);
+
+  const scores = [];
+
   console.log("Finished optimizing", globalContext.bestTaskAssignment);
   for (var pId = 0; pId < globalContext.participants.length; pId++) {
-    console.log(
-      "Participant",
-      pId,
-      self.computeScoreForParticipant(
-        globalContext,
-        globalContext.bestTaskAssignment,
-        pId
-      )
+    scores[pId] = self.computeScoreForParticipant(
+      globalContext,
+      globalContext.bestTaskAssignment,
+      pId
     );
+    console.log("Participant", pId, scores[pId]);
   }
-  return globalContext.bestTaskAssignment;
+  return {
+    assignment: globalContext.bestTaskAssignment,
+    scores
+  };
 };
 
 self.normalizeCosts = costs => {
@@ -44,7 +47,6 @@ self.normalizeCosts = costs => {
     for (var taskId = 0; taskId < costs[participantIdx].length; taskId++) {
       total += self.getCostAsFloat(costs, participantIdx, taskId, 0);
     }
-    console.log("total", total);
     newCosts[participantIdx] = [];
     for (var taskId = 0; taskId < costs[participantIdx].length; taskId++) {
       newCosts[participantIdx][taskId] =
@@ -54,7 +56,6 @@ self.normalizeCosts = costs => {
             total;
     }
   }
-  console.log("newCosts", newCosts);
   return newCosts;
 };
 
