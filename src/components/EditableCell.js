@@ -9,17 +9,31 @@ function EditableCell(props) {
 
   const classNames = [props.extraClassName, props.isCentered ? "centered" : ""];
 
-  const input = (
-    <Form.Control
-      type="text"
-      placeholder={props.placeholder}
-      value={props.value}
-      onChange={handleFromChange}
-      className={classNames}
-    />
+  const backgroundContent = props.backgroundText ? (
+    <div class="background-text">{props.backgroundText}</div>
+  ) : (
+    <></>
   );
 
-  return props.isHeader === true ? <th>{input}</th> : <td>{input}</td>;
+  const cellContent = (
+    <>
+      <Form.Control
+        type="text"
+        placeholder={props.placeholder}
+        value={props.value}
+        onChange={handleFromChange}
+        className={classNames}
+      />
+
+      {backgroundContent}
+    </>
+  );
+
+  return props.isHeader === true ? (
+    <th>{cellContent}</th>
+  ) : (
+    <td>{cellContent}</td>
+  );
 }
 
 export default EditableCell;

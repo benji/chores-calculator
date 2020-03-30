@@ -58,6 +58,7 @@ function Chores(props) {
       tasks,
       costs
     });
+    console.log(result);
     setAssignments(result.assignment);
     setScores(result.scores);
   };
@@ -75,6 +76,19 @@ function Chores(props) {
     />
   ));
 
+  const getPct = (participantIdx, taskIdx) => {
+    if (costs[participantIdx] && costs[participantIdx][taskIdx]) {
+      return (
+        parseInt(
+          (costs[participantIdx][taskIdx] * 100) /
+            costs[participantIdx].reduce((a, b) => a + b, 0)
+        ) + "%"
+      );
+    } else {
+      return "q";
+    }
+  };
+
   const tableContent = tasks.map((t, taskIdx) => (
     <tr>
       <EditableCell value={t.name} onChange={updateTaskName(taskIdx)} />
@@ -85,29 +99,38 @@ function Chores(props) {
           onChange={updateCost(participantIdx, taskIdx)}
           placeholder="0"
           extraClassName={isAssigned(participantIdx, taskIdx) ? "assigned" : ""}
+          backgroundText={getPct(participantIdx, taskIdx)}
         />
       ))}
     </tr>
   ));
 
   const scoresContent = scores.map(s => (
-    <EditableCell value={parseInt(s * 100)} placeholder="-" isCentered="true" />
+    <>
+      <EditableCell
+        value={parseInt(s * 100) + "%"}
+        placeholder="-"
+        isCentered="true"
+      />
+    </>
   ));
 
   return (
     <div>
-      <Table striped bordered hover responsive="lg">
+      <Table bordered responsive="lg">
         <thead>
           <tr>
             <th></th>
             {participantHeaders}
           </tr>
+        </thead>
+        <tbody>
           {tableContent}
           <tr>
             <EditableCell value="(Scores)" placeholder="-" />
             {scoresContent}
           </tr>
-        </thead>
+        </tbody>
       </Table>
     </div>
   );

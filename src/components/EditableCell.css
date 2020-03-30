@@ -4,6 +4,7 @@ th {
   margin: 0 !important;
   border: 0 !important;
   background: transparent !important;
+  position: relative;
 }
 input {
   padding: 0.2em 1em !important;
@@ -24,4 +25,13 @@ input.centered {
 }
 ::placeholder {
   color: rgb(168, 168, 168) !important;
+}
+
+.background-text {
+  position: absolute;
+  padding: 0.4em 3em;
+  right: 0;
+  top: 0;
+  color: #909090;
+  z-index: 10;
 }
